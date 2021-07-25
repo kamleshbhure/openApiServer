@@ -1,0 +1,174 @@
+openapi: 3.0.1
+info:
+  title: Book Application API
+  description: This is a sample Spring Boot RESTful service using springdoc-openapi and OpenAPI 3
+  termsOfService: http://swagger.io/terms/
+  license:
+    name: Apache 2.0
+    url: http://springdoc.org
+  version: '1.0'
+servers:
+- url: http://localhost:8081
+  description: Generated server url
+tags:
+- name: book
+  description: the book API
+paths:
+  /book/{id}:
+    get:
+      tags:
+      - book
+      summary: This is to fetch a Book stored in Db
+      operationId: find
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Fetch Book from Db
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Not Available
+    put:
+      tags:
+      - book
+      summary: Update an existing book
+      operationId: updateBook
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '405':
+          description: Validation exception
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    delete:
+      tags:
+      - book
+      summary: Deletes a book
+      operationId: delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '404':
+          description: book not found
+        '200':
+          description: successful operation
+  /book/:
+    get:
+      tags:
+      - book
+      summary: This is to fetch All the Books stored in Db
+      operationId: allBooks
+      responses:
+        '200':
+          description: Fetched All the Books form Db
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '404':
+          description: Not Available
+    post:
+      tags:
+      - book
+      summary: Add a new Book
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        '409':
+          description: Book already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '201':
+          description: Book created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+components:
+  schemas:
+    Book:
+      required:
+      - author
+      - id
+      - price
+      - title
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier of the Book.
+          format: int64
+          example: 1
+        title:
+          type: string
+          description: Title of the book.
+          example: Life of Pi
+        author:
+          type: string
+          description: Author of the book.
+          example: Kamlesh Bhure
+        price:
+          maxLength: 10
+          minLength: 0
+          type: string
+          description: Price of the book.
+          example: Kamlesh Bhure
